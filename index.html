@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloc de Notas con Verificación</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            position: relative; /* Necesario para el posicionamiento absoluto del overlay */
+            z-index: 1; /* Asegura que el formulario esté por debajo del overlay inicialmente */
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1; /* Asegura que el botón esté por debajo del overlay */
+            position: relative; /* Para el contexto del z-index */
+        }
+        #overlay {
+            position: fixed; /* Se mantiene fijo en la ventana */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para oscurecer el resto */
+            display: none; /* Oculto al inicio */
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            z-index: 1000; /* Asegura que esté por encima de todo */
+        }
+        #imagen-mostrar {
+            max-width: 200px;
+            height: auto;
+            animation: rotar 2s linear infinite; /* Animación de rotación */
+            background-color: white; /* Para que se vea la rotación si la imagen tiene transparencia */
+            border-radius: 50%; /* Para que parezca un círculo rotando */
+        }
+        #audio-reproducir {
+            display: none; /* Oculto al inicio */
+        }
+
+        @keyframes rotar {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bloc de Notas con Verificación</h2>
+        <div class="form-group">
+            <label>Sexo:</label>
+            <label><input type="radio" name="sexo" value="masculino"> Masculino</label>
+            <label><input type="radio" name="sexo" value="femenino"> Femenino</label>
+        </div>
+        <div class="form-group">
+            <label for="peso">Peso (en kg):</label>
+            <input type="number" id="peso" name="peso">
+        </div>
+        <button onclick="verificar()">Insertar</button>
+    </div>
+
+    <div id="overlay">
+        <img id="imagen-mostrar" src="gordas.jpg" alt="Imagen a mostrar">
+        <audio id="audio-reproducir" src="audio.mp3"></audio>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('overlay');
+        const imagenMostrar = document.getElementById('imagen-mostrar');
+        const audioReproducir = document.getElementById('audio-reproducir');
+
+        function verificar() {
+            const sexoSeleccionado = document.querySelector('input[name="sexo"]:checked');
+            const peso = parseFloat(document.getElementById('peso').value);
+
+            if (sexoSeleccionado && sexoSeleccionado.value === 'femenino' && !isNaN(peso) && peso > 90) {
+                overlay.style.display = 'flex'; // Usamos flex para centrar la imagen
+                audioReproducir.play();
+            } else {
+                overlay.style.display = 'none';
+                audioReproducir.pause();
+                audioReproducir.currentTime = 0;
+            }
+        }
+    </script>
+</body>
+</html>
